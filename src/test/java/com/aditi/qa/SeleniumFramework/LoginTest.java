@@ -7,7 +7,7 @@ public class LoginTest extends BaseClass {
 @Test
 public void verifyTest()
 {
-	
+	//object
    LoginPage lp=new LoginPage(driver, prop);
      lp.login();
      Assert.assertTrue(lp.isLoginSuccessful(), "Dashboard is not dispayed");
