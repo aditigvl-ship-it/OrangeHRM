@@ -10,7 +10,7 @@ public class PIMTest extends BaseClass{
 	@Test
 	public void addEmp()
 	{
-	
+	//obj
 	LoginPage pg=new LoginPage(driver, prop);
 	pg.login();
 	PIMPage pim=new PIMPage(driver, prop);
