@@ -32,27 +32,15 @@ public class BaseClass {
             WebDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
 
-            // Detect CI environment and set binary path only there
-            if (System.getenv("CI") != null) {
-                String chromiumPath = "/usr/bin/chromium-browser";
-                if (!new java.io.File(chromiumPath).exists()) {
-                    chromiumPath = "/usr/bin/chromium";
-                }
-                options.setBinary(chromiumPath);
-            }
-            // Locally, no binary override → uses your installed Chrome
-
-            // toggle headless via system property
-            if (System.getProperty("headless", "false").equals("true")) {
-                options.addArguments("--headless=new");
-                options.addArguments("--no-sandbox");
-                options.addArguments("--disable-dev-shm-usage");
-                options.addArguments("--disable-gpu");
-            }
+            // Always apply for CI stability
+            options.addArguments("--headless=new");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
             options.addArguments("--remote-allow-origins=*");
 
             driver = new ChromeDriver(options);
         }
+        
 
 
          else if (browser.equalsIgnoreCase("firefox")) {
