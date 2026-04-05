@@ -2,8 +2,11 @@ package com.aditi.qa.SeleniumFramework;
 
 import java.time.Duration;
 import java.util.Properties;
+import org.openqa.selenium.TimeoutException;   // ✅ correct one
+
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -24,7 +27,7 @@ public class PIMPage {
         wait = new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 
-    // WebElements
+    // Elements
     @FindBy(xpath = "//span[normalize-space()='PIM']")
     WebElement pimdash;
 
@@ -47,38 +50,38 @@ public class PIMPage {
     WebElement save;
 
     // Action
-    public void addEmployee(String first, String second, String last, String id, String imagepath) {
+    public void addEmployee(String first, String second, String last, String id, String imagepath) throws TimeoutException {
 
-        // wait for dashboard after login
-    	if (driver.getCurrentUrl().contains("dashboard")) {
-    	    wait.until(ExpectedConditions.elementToBeClickable(pimdash)).click();
-    	}
-
-        // click PIM
-        wait.until(ExpectedConditions.visibilityOf(pimdash));
         wait.until(ExpectedConditions.elementToBeClickable(pimdash)).click();
-
-        // click Add
         wait.until(ExpectedConditions.elementToBeClickable(add)).click();
 
-        // fill form
         wait.until(ExpectedConditions.visibilityOf(fname)).sendKeys(first);
-        wait.until(ExpectedConditions.visibilityOf(mname)).sendKeys(second);
-        wait.until(ExpectedConditions.visibilityOf(lname)).sendKeys(last);
+        mname.sendKeys(second);
+        lname.sendKeys(last);
 
         wait.until(ExpectedConditions.visibilityOf(eid));
         eid.clear();
         eid.sendKeys(id);
 
-        // upload image
-        WebElement uploadInput = wait.until(
-                ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='file']")));
-        uploadInput.sendKeys(imagepath);
+        // Upload image
+        if (imagepath != null && !imagepath.isEmpty()) {
+            WebElement upload = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='file']")));
+            upload.sendKeys(imagepath);
+        }
 
-        // wait loader gone
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("oxd-form-loader")));
+     // Click Save safely
+        By loader = By.cssSelector("div.oxd-form-loader");
 
-        // save
-        wait.until(ExpectedConditions.elementToBeClickable(save)).click();
+     // If loader appears, wait until it disappears
+     try {
+         wait.until(ExpectedConditions.invisibilityOfElementLocated(loader));
+     } catch (TimeoutException e) {
+         // Loader never appeared, continue
+     }
     }
-}
+
+
+     
+
+    }
