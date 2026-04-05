@@ -30,14 +30,9 @@ public class BaseClass {
 
 	     if (browser.equalsIgnoreCase("chrome")) {
 	         WebDriverManager.chromedriver().setup();
-	         ChromeOptions options = new ChromeOptions();
-	         options.addArguments("--headless=new");
-	         options.addArguments("--no-sandbox");
-	         options.addArguments("--disable-dev-shm-usage");
-	         options.addArguments("--disable-gpu");
-	         options.addArguments("--window-size=1920,1080");
-
-	         driver = new ChromeDriver(options);  // ✅ pass options here
+	       
+	       
+	         driver = new ChromeDriver();  
 	     } else if (browser.equalsIgnoreCase("firefox")) {
 	         WebDriverManager.firefoxdriver().setup();
 	         driver = new FirefoxDriver();
