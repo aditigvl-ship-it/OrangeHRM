@@ -21,15 +21,17 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Install Chrome
+    - name: Install Chromium
       run: |
         sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
+        sudo apt-get install -y chromium-browser
 
     - name: Build with Maven
       run: mvn -B clean install
 
-    - name: Run tests (headless Chrome)
+    - name: Run tests (headless Chromium)
+      env:
+        CI: true   # flag to let BaseClass know it's running in CI
       run: mvn -B test -Dheadless=true
 
     - name: Upload Surefire reports
