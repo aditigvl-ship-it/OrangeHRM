@@ -20,47 +20,38 @@ public class BaseClass {
 	 protected WebDriver driver;
 	 
 	 @BeforeMethod
-	 public void setUp() throws IOException
-	 {
-		prop= new Properties();
-		FileInputStream fis = new FileInputStream(
-	   System.getProperty("user.dir") + "/src/main/resources/config.properties");
-		prop.load(fis); 
-		 // Initialize the WebDriver based on browser defined in config.properties 
-		String browser= prop.getProperty("browser").trim();
-		if(browser.equalsIgnoreCase("chrome"))
-		{
-			driver=new ChromeDriver();
-		}
-		else if(browser.equalsIgnoreCase("firefox"))
-		{
-			driver=new FirefoxDriver();
-		}
-		
-		 else if (browser.equalsIgnoreCase("edge")) { 
-             driver = new EdgeDriver(); 
-		 }
-		 else
-		 {
-			 throw new IllegalArgumentException("Browser Not Supported:" + browser); 
-		 }
-		
-		  // ✅ Browser setup
-		 WebDriverManager.chromedriver().setup();
-	    ChromeOptions options = new ChromeOptions();
+	 public void setUp() throws IOException {
+	     prop = new Properties();
+	     FileInputStream fis = new FileInputStream(
+	         System.getProperty("user.dir") + "/src/main/resources/config.properties");
+	     prop.load(fis);
 
-	    // 🔥 MUST for Linux / GitHub Actions
-	    options.addArguments("--headless=new");
-	    options.addArguments("--no-sandbox");
-	    options.addArguments("--disable-dev-shm-usage");
-	    options.addArguments("--disable-gpu");
-	    options.addArguments("--window-size=1920,1080");
-		 
-	    driver.manage().window().maximize();
-	    driver.manage().timeouts().implicitlyWait(java.time.Duration.ofSeconds(10));
+	     String browser = prop.getProperty("browser").trim();
 
-	    // ✅ Open URL from properties
-	    driver.get(prop.getProperty("url").trim());
+	     if (browser.equalsIgnoreCase("chrome")) {
+	         WebDriverManager.chromedriver().setup();
+	         ChromeOptions options = new ChromeOptions();
+	         options.addArguments("--headless=new");
+	         options.addArguments("--no-sandbox");
+	         options.addArguments("--disable-dev-shm-usage");
+	         options.addArguments("--disable-gpu");
+	         options.addArguments("--window-size=1920,1080");
+
+	         driver = new ChromeDriver(options);  // ✅ pass options here
+	     } else if (browser.equalsIgnoreCase("firefox")) {
+	         WebDriverManager.firefoxdriver().setup();
+	         driver = new FirefoxDriver();
+	     } else if (browser.equalsIgnoreCase("edge")) {
+	         WebDriverManager.edgedriver().setup();
+	         driver = new EdgeDriver();
+	     } else {
+	         throw new IllegalArgumentException("Browser Not Supported:" + browser);
+	     }
+
+	     driver.manage().window().maximize();
+	     driver.manage().timeouts().implicitlyWait(java.time.Duration.ofSeconds(10));
+
+	     driver.get(prop.getProperty("url").trim());
 	 }
 	 
 	 @AfterMethod
