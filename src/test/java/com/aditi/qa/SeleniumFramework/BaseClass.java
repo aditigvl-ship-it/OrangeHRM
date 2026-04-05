@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterMethod;
@@ -45,7 +46,16 @@ public class BaseClass {
 		 }
 		
 		  // ✅ Browser setup
-		  WebDriverManager.chromedriver().setup();
+		 WebDriverManager.chromedriver().setup();
+	    ChromeOptions options = new ChromeOptions();
+
+	    // 🔥 MUST for Linux / GitHub Actions
+	    options.addArguments("--headless=new");
+	    options.addArguments("--no-sandbox");
+	    options.addArguments("--disable-dev-shm-usage");
+	    options.addArguments("--disable-gpu");
+	    options.addArguments("--window-size=1920,1080");
+		 
 	    driver.manage().window().maximize();
 	    driver.manage().timeouts().implicitlyWait(java.time.Duration.ofSeconds(10));
 
