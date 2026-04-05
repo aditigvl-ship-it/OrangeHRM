@@ -22,7 +22,9 @@ jobs:
         cache: maven
 
     - name: Install Chrome
-      run: sudo apt-get install -y google-chrome-stable
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
 
     - name: Build with Maven
       run: mvn -B clean install
@@ -31,7 +33,7 @@ jobs:
       run: mvn -B test -Dheadless=true
 
     - name: Upload Surefire reports
-      if: always()   # ensures reports are uploaded even if tests fail
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: surefire-reports
