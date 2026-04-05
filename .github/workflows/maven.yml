@@ -24,14 +24,14 @@ jobs:
     - name: Install Chromium
       run: |
         sudo apt-get update
-        sudo apt-get install -y chromium-browser
+        sudo apt-get install -y chromium-browser || sudo apt-get install -y chromium
 
     - name: Build with Maven
       run: mvn -B clean install
 
     - name: Run tests (headless Chromium)
       env:
-        CI: true   # flag for BaseClass to set binary path
+        CI: true   # flag for BaseClass to detect CI
       run: mvn -B test -Dheadless=true
 
     - name: Upload Combined Test Reports
@@ -42,3 +42,13 @@ jobs:
         path: |
           target/surefire-reports
           test-output/ExtentReports
+
+    - name: Publish Extent Report to Summary
+      if: always()
+      run: |
+        echo "## 📊 Extent Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "The full styled report is included in the **test-reports** artifact." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Generated files:" >> $GITHUB_STEP_SUMMARY
+        ls -1 test-output/ExtentReports >> $GITHUB_STEP_SUMMARY
