@@ -21,11 +21,14 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
+    - name: Install Chrome
+      run: sudo apt-get install -y google-chrome-stable
+
     - name: Build with Maven
       run: mvn -B clean install
 
-    - name: Run tests
-      run: mvn -B test
+    - name: Run tests (headless Chrome)
+      run: mvn -B test -Dheadless=true
 
     - name: Upload Surefire reports
       if: always()   # ensures reports are uploaded even if tests fail
@@ -39,4 +42,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: extent-reports
-        path: test-output/ExtentReports
+        path: target/extent-reports
