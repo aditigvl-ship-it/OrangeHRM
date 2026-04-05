@@ -69,7 +69,7 @@ public class BaseClass {
         driver.manage().timeouts().implicitlyWait(java.time.Duration.ofSeconds(10));
         driver.get(prop.getProperty("url").trim());
     }
-    
+    //quit
     @AfterMethod
     public void tearDown() {
         if (driver != null) {
