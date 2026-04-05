@@ -11,6 +11,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+
 public class BaseClass {
 	
 	 protected Properties prop;
@@ -43,6 +45,7 @@ public class BaseClass {
 		 }
 		
 		  // ✅ Browser setup
+		  WebDriverManager.chromedriver().setup();
 	    driver.manage().window().maximize();
 	    driver.manage().timeouts().implicitlyWait(java.time.Duration.ofSeconds(10));
 
